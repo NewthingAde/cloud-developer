@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
+    "express-csp-header": "^5.0.0",
     "jimp": "^0.16.1",
     "rimraf": "^3.0.2"
   }
