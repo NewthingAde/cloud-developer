@@ -36,24 +36,21 @@ dotenv.config();
 
   app.get("/filteredimage", async (req, res) => {
 
-    let filterimageUrl: string = req.query.filterimageUrl;
+    let filterimageUrl:string = req.query.filterimageUrl;
 
     //let acceptedImageUrl: any = filterimageUrl.match("http://localhost:{{PORT}}/filteredimage?image_url=https://upload.wikimedia.org/wikipedia/commons/b/bd/Golden_tabby_and_white_kitten_n01.jpg");
-    let acceptedImageUrl: any = filterimageUrl.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+    const acceptedImageUrl:any = filterimageUrl.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
 
-    
-    let filteredImage: string = await filterImageFromURL(filterimageUrl);
-
-    if (acceptedImageUrl == false)
+    if (acceptedImageUrl == null)
       return res.status(401).send("Enter a valid url");
 
     else {
-
+      const filteredImage:string = await filterImageFromURL(filterimageUrl);
       if (filteredImage === null || filteredImage === undefined)
         return res.status(401).send("image cannot be filtered try again!");
 
       else {
-        res.on("Completed", function () {
+        res.on("finish", function () {
           deleteLocalFiles([filteredImage]);
         });
         return res.status(200).sendFile("" + filteredImage);
