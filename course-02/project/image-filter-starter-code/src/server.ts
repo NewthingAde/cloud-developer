@@ -2,6 +2,9 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { filterImageFromURL, deleteLocalFiles } from './util/util';
 import { any } from 'bluebird';
+import dotenv from "dotenv";
+
+dotenv.config();
 
 (async () => {
 
@@ -13,7 +16,8 @@ import { any } from 'bluebird';
   const app = express();
 
   // Set the network port
-  const port = process.env.PORT || 8082;
+  const port = process.env.PORT || 8080;
+
 
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
@@ -34,7 +38,9 @@ import { any } from 'bluebird';
 
     let filterimageUrl: string = req.query.filterimageUrl;
 
-    let acceptedImageUrl: any = filterimageUrl.match("http://localhost:{{PORT}}/filteredimage?image_url=https://upload.wikimedia.org/wikipedia/commons/b/bd/Golden_tabby_and_white_kitten_n01.jpg");
+    //let acceptedImageUrl: any = filterimageUrl.match("http://localhost:{{PORT}}/filteredimage?image_url=https://upload.wikimedia.org/wikipedia/commons/b/bd/Golden_tabby_and_white_kitten_n01.jpg");
+    let acceptedImageUrl: any = filterimageUrl.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+
     
     let filteredImage: string = await filterImageFromURL(filterimageUrl);
 
